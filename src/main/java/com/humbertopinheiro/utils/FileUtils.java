@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
+import java.util.logging.Logger;
 
 /**
  * Created with IntelliJ IDEA.
@@ -13,6 +14,8 @@ import java.nio.channels.ReadableByteChannel;
  * Time: 22:09
  */
 public class FileUtils {
+
+    private final static Logger LOGGER = Logger.getLogger(FileUtils.class .getName());
 
     public static String slurpFile(java.io.InputStream is) {
         java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
@@ -25,7 +28,8 @@ public class FileUtils {
             FileOutputStream fos = new FileOutputStream(filename);
             fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
         } catch (IOException e) {
-            // TODO logging
+            LOGGER.severe(e.getMessage());
         }
     }
+
 }

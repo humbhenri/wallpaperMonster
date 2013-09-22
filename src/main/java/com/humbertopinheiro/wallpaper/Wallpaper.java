@@ -22,9 +22,9 @@ public class Wallpaper {
         this.title = title;
     }
 
-    public Wallpaper(URL url) {
+    public Wallpaper(URL url, String title) {
+        this.title = title;
         URLUtils urlUtils = new URLUtils();
-        this.title = urlUtils.titleFromURL(url);
         this.filename = new File(Application.INSTANCE.getWallpaperStore(),
                 urlUtils.lastComponent(url)).getAbsolutePath();
         this.url = url;

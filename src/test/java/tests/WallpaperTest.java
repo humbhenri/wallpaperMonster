@@ -28,7 +28,7 @@ public class WallpaperTest {
     @Test
     public void shouldSaveFromURL() {
         URLUtils urlUtils = new URLUtils();
-        Wallpaper wallpaper = new Wallpaper(urlUtils.fromString("http://www.site.com/fig.jpg"));
+        Wallpaper wallpaper = new Wallpaper(urlUtils.fromString("http://www.site.com/fig.jpg"), null);
         Assert.assertThat(wallpaper.getFilename(), is("/tmp/fig.jpg"));
     }
 

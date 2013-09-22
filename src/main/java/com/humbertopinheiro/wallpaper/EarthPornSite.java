@@ -1,14 +1,15 @@
 package com.humbertopinheiro.wallpaper;
 
 import com.humbertopinheiro.utils.FileUtils;
+import com.humbertopinheiro.utils.URLUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Iterator;
+import java.util.logging.Logger;
 
 /**
  * Created with IntelliJ IDEA.
@@ -16,21 +17,15 @@ import java.util.Iterator;
  * Date: 03/09/13
  * Time: 21:00
  */
-public class EarthPornSite implements WallpaperProvider{
+public class EarthPornSite implements WallpaperProvider {
 
     private URLDownloader urlDownloader;
     private Iterator<Element> iterator;
     private FileUtils fileUtils;
+    private final static Logger LOGGER = Logger.getLogger(EarthPornSite.class.getName());
 
     public EarthPornSite() {
         fileUtils = new FileUtils();
-    }
-
-    @Override
-    public Wallpaper nextWallpaper() {
-        Wallpaper wallpaper = new Wallpaper(nextImageLink());
-        fileUtils.saveFromUrl(wallpaper.getURL(), wallpaper.getFilename());
-        return wallpaper;
     }
 
     @Override
@@ -54,7 +49,7 @@ public class EarthPornSite implements WallpaperProvider{
         return urlDownloader;
     }
 
-    private URL nextImageLink() {
+    public Wallpaper nextWallpaper() {
         URL url = null;
         if (urlDownloader == null) {
             urlDownloader = new URLDownloader("http://www.reddit.com/r/earthporn");
@@ -65,12 +60,13 @@ public class EarthPornSite implements WallpaperProvider{
             iterator = links.iterator();
         }
         if (iterator.hasNext()) {
-            try {
-                url = new URL(iterator.next().attr("href"));
-            } catch (MalformedURLException e) {
-                // TODO logging
-            }
+            Element next = iterator.next();
+            url = new URLUtils().fromString(next.attr("href"));
+            String title = next.text();
+            Wallpaper wallpaper = new Wallpaper(url, title);
+            fileUtils.saveFromUrl(wallpaper.getURL(), wallpaper.getFilename());
+            return wallpaper;
         }
-        return url;
+        return null;
     }
 }

@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.logging.Logger;
 
 /**
  * Created with IntelliJ IDEA.
@@ -12,18 +13,20 @@ import java.net.URL;
  * Time: 23:20
  */
 public class URLUtils {
+
+    private final static Logger LOGGER = Logger.getLogger(URLUtils.class .getName());
+
     public URL fromString(String url) {
         try {
             return new URL(url);
         } catch (MalformedURLException e) {
-            // TODO logging
+            LOGGER.severe(e.getMessage());
             return null;
         }
     }
 
     public String titleFromURL(URL url) {
-        // TODO
-        return null;
+        return StringUtils.split(lastComponent(url), ".")[0];
     }
 
     public String lastComponent(URL url) {

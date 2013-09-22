@@ -7,5 +7,5 @@ package com.humbertopinheiro.wallpaper;
  * Time: 20:43
  */
 public interface WallpaperProvider {
-    public Wallpaper nextWallpaper();
+    Wallpaper nextWallpaper();
 }

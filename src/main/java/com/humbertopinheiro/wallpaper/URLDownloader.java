@@ -5,6 +5,7 @@ import com.humbertopinheiro.utils.URLUtils;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.logging.Logger;
 
 /**
  * Created with IntelliJ IDEA.
@@ -14,6 +15,7 @@ import java.io.InputStreamReader;
  */
 public class URLDownloader {
     private final String url;
+    private final static Logger LOGGER = Logger.getLogger(URLDownloader.class.getName());
 
     public URLDownloader(String url) {
         this.url = url;
@@ -28,7 +30,7 @@ public class URLDownloader {
                 output.append(line);
             }
         } catch (IOException e) {
-            // TODO logging
+            LOGGER.severe(e.getMessage());
         }
         return output.toString();
     }

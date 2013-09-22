@@ -6,9 +6,9 @@ package com.humbertopinheiro.wallpaper;
  * Date: 12/09/13
  * Time: 22:35
  */
-public class MockWallpaperProvider implements WallpaperProvider{
+public class MockWallpaperProvider implements WallpaperProvider {
     @Override
     public Wallpaper nextWallpaper() {
-        return new Wallpaper("Blah");
+        return new Wallpaper(MockWallpaperProvider.class.getResource("/sample.jpg"), null);
     }
 }

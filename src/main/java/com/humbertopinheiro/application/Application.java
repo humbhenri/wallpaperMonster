@@ -1,6 +1,10 @@
 package com.humbertopinheiro.application;
 
+import com.google.common.util.concurrent.ListeningExecutorService;
+import com.google.common.util.concurrent.MoreExecutors;
 import com.humbertopinheiro.wallpaper.WallpaperProvider;
+
+import java.util.concurrent.Executors;
 
 /**
  * Created with IntelliJ IDEA.
@@ -14,9 +18,12 @@ public enum Application {
 
     private WallpaperProvider[] wallpaperProviders;
     private String wallpaperStore;
+    private ListeningExecutorService pool =
+            MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(10));
 
-    public void setWallpaperProviders(WallpaperProvider[] providers){
+    public Application setWallpaperProviders(WallpaperProvider[] providers) {
         this.wallpaperProviders = providers;
+        return INSTANCE;
     }
 
     public WallpaperProvider[] getWallpaperProviders() {
@@ -27,7 +34,12 @@ public enum Application {
         return wallpaperStore;
     }
 
-    public void setWallpaperStore(String wallpaperStore) {
+    public Application setWallpaperStore(String wallpaperStore) {
         this.wallpaperStore = wallpaperStore;
+        return INSTANCE;
+    }
+
+    public ListeningExecutorService pool() {
+        return pool;
     }
 }
