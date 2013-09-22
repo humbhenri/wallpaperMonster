@@ -1,6 +1,10 @@
 package ui;
 
+import com.humbertopinheiro.application.Application;
 import com.humbertopinheiro.ui.MainWindow;
+import com.humbertopinheiro.wallpaper.EarthPornSite;
+import com.humbertopinheiro.wallpaper.MockWallpaperProvider;
+import com.humbertopinheiro.wallpaper.WallpaperProvider;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiActionRunner;
 import org.fest.swing.edt.GuiQuery;
@@ -28,7 +32,9 @@ public class MainWindowTest {
     @BeforeClass
     public static void setUpOnce() {
         FailOnThreadViolationRepaintManager.install();
-
+        WallpaperProvider[] providers = {new EarthPornSite(), new MockWallpaperProvider()};
+        Application.INSTANCE.setWallpaperProviders(providers)
+                .setWallpaperStore("/tmp/");
     }
 
     @Before

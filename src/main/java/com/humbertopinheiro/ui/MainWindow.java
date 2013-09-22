@@ -4,9 +4,7 @@ import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.humbertopinheiro.application.Application;
-import com.humbertopinheiro.wallpaper.EarthPornSite;
-import com.humbertopinheiro.wallpaper.Wallpaper;
-import com.humbertopinheiro.wallpaper.WallpaperProvider;
+import com.humbertopinheiro.wallpaper.*;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
@@ -44,6 +42,11 @@ public class MainWindow extends JFrame {
         WallpaperProvider[] providers = Application.INSTANCE.getWallpaperProviders();
         final JComboBox<WallpaperProvider> wallpaperProviderJComboBox = new JComboBox<>(providers);
         wallpaperProviderJComboBox.setName("wallpaperProviders");
+        addChangeWallpaperListener(wallpaperProviderJComboBox);
+        return wallpaperProviderJComboBox;
+    }
+
+    private void addChangeWallpaperListener(final JComboBox<WallpaperProvider> wallpaperProviderJComboBox) {
         wallpaperProviderJComboBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -54,6 +57,9 @@ public class MainWindow extends JFrame {
                         return provider.nextWallpaper();
                     }
                 });
+
+                wallpaperPanel.setWallpaper(new LoadingWallpaper());
+
                 Futures.addCallback(future, new FutureCallback<Wallpaper>() {
                     @Override
                     public void onSuccess(Wallpaper wallpaper) {
@@ -69,7 +75,6 @@ public class MainWindow extends JFrame {
 
             }
         });
-        return wallpaperProviderJComboBox;
     }
 
     private Component getInfoLabel() {
@@ -86,7 +91,7 @@ public class MainWindow extends JFrame {
     }
 
     private static void setupApplication() {
-        WallpaperProvider[] providers = {new EarthPornSite()};
+        WallpaperProvider[] providers = {new EarthPornSite(), new MockWallpaperProvider()};
         Application.INSTANCE.setWallpaperProviders(providers)
                 .setWallpaperStore("/tmp/");
     }

@@ -1,5 +1,8 @@
 package com.humbertopinheiro.wallpaper;
 
+import com.humbertopinheiro.utils.FileUtils;
+import com.humbertopinheiro.utils.URLUtils;
+
 /**
  * Created with IntelliJ IDEA.
  * User: humberto
@@ -9,6 +12,9 @@ package com.humbertopinheiro.wallpaper;
 public class MockWallpaperProvider implements WallpaperProvider {
     @Override
     public Wallpaper nextWallpaper() {
-        return new Wallpaper(MockWallpaperProvider.class.getResource("/sample.jpg"), null);
+        Wallpaper wallpaper = new Wallpaper(MockWallpaperProvider.class.getResource("/sample.jpg"), null);
+        wallpaper.setTitle(new URLUtils().titleFromURL(wallpaper.getURL()));
+        new FileUtils().saveFromUrl(wallpaper.getURL(), wallpaper.getFilename());
+        return wallpaper;
     }
 }

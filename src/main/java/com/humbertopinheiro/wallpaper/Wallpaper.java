@@ -41,4 +41,8 @@ public class Wallpaper {
     public URL getURL() {
         return url;
     }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 }

@@ -2,12 +2,8 @@ package com.humbertopinheiro.ui;
 
 import com.humbertopinheiro.wallpaper.Wallpaper;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
-import java.io.IOException;
-import java.util.logging.Logger;
 
 /**
  * Created with IntelliJ IDEA.
@@ -17,25 +13,23 @@ import java.util.logging.Logger;
  */
 public class WallpaperPanel extends JPanel {
 
-    private final static Logger LOGGER = Logger.getLogger(WallpaperPanel.class .getName());
-
     private Image backgroundImage;
 
     public void setWallpaper(Wallpaper wallpaper) {
-        try {
-            backgroundImage = ImageIO.read(new File(wallpaper.getFilename()));
-            repaint();
-        } catch (IOException e) {
-            LOGGER.severe(e.getMessage());
-            backgroundImage = null;
-        }
+        backgroundImage = getToolkit().createImage(wallpaper.getFilename());
+        repaint();
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         if (backgroundImage != null) {
-            g.drawImage(backgroundImage, 0, 0, this);
+            int width = backgroundImage.getWidth(this);
+            int height = backgroundImage.getHeight(this);
+            g.drawImage(backgroundImage,
+                    (getWidth() / 2) - (width / 2),
+                    (getHeight() / 2) - (height / 2),
+                    this);
         }
     }
 }
