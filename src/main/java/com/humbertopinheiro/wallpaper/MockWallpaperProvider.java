@@ -17,4 +17,19 @@ public class MockWallpaperProvider implements WallpaperProvider {
         new FileUtils().saveFromUrl(wallpaper.getURL(), wallpaper.getFilename());
         return wallpaper;
     }
+
+    @Override
+    public Wallpaper previousWallpaper() {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public boolean hasPrevious() {
+        return false;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public boolean hasNext() {
+        return false;  //To change body of implemented methods use File | Settings | File Templates.
+    }
 }

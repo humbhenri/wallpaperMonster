@@ -27,6 +27,7 @@ public class FileUtils {
             ReadableByteChannel rbc = Channels.newChannel(url.openStream());
             FileOutputStream fos = new FileOutputStream(filename);
             fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+            LOGGER.info(url + " saved to " + filename);
         } catch (IOException e) {
             LOGGER.severe(e.getMessage());
         }

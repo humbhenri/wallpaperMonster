@@ -2,6 +2,8 @@ package com.humbertopinheiro.wallpaper;
 
 import com.humbertopinheiro.application.Application;
 import com.humbertopinheiro.utils.URLUtils;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.io.File;
 import java.net.URL;
@@ -44,5 +46,21 @@ public class Wallpaper {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) { return false; }
+        if (obj == this) { return true; }
+        if (obj.getClass() != getClass()) {
+            return false;
+        }
+        Wallpaper other = (Wallpaper) obj;
+        return new EqualsBuilder().append(url, other.url).isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder().append(url).hashCode();
     }
 }

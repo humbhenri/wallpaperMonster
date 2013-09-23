@@ -8,4 +8,7 @@ package com.humbertopinheiro.wallpaper;
  */
 public interface WallpaperProvider {
     Wallpaper nextWallpaper();
+    Wallpaper previousWallpaper();
+    boolean hasPrevious();
+    boolean hasNext();
 }

@@ -8,14 +8,14 @@ import com.humbertopinheiro.wallpaper.Wallpaper;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.io.InputStream;
 import java.net.URL;
 
-import static junit.framework.Assert.assertTrue;
-import static junit.framework.TestCase.assertFalse;
+import static junit.framework.Assert.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doNothing;
@@ -36,15 +36,13 @@ public class EarthPornSiteTest {
     @Mock
     private FileUtils fileUtils;
 
-    private EarthPornSite earthPornSite;
+    @InjectMocks
+    private EarthPornSite earthPornSite = new EarthPornSite();
 
     @Before
     public void setUp() {
         when(urlDownloader.getHTML()).thenReturn(getHTMLContent());
         doNothing().when(fileUtils).saveFromUrl(any(URL.class), anyString());
-        earthPornSite = new EarthPornSite();
-        earthPornSite.setUrlDownloader(urlDownloader);
-        earthPornSite.setFileUtils(fileUtils);
     }
 
     @Test
@@ -54,9 +52,28 @@ public class EarthPornSiteTest {
     }
 
     @Test
-    public void nextWallpaperShouldBeDifferentFromPrevious() {
-        Wallpaper wallpaper = earthPornSite.nextWallpaper();
-        assertFalse(wallpaper.getURL().equals(earthPornSite.nextWallpaper().getURL()));
+    public void hasPreviousShouldReturnFalseIfCalledMoreTimesThanNext() {
+        earthPornSite.nextWallpaper();
+        earthPornSite.nextWallpaper();
+        earthPornSite.nextWallpaper();
+        earthPornSite.previousWallpaper();
+        earthPornSite.previousWallpaper();
+        earthPornSite.previousWallpaper();
+        assertNull(earthPornSite.previousWallpaper());
+        assertFalse(earthPornSite.hasPrevious());
+    }
+
+    @Test
+    public void shouldNotHasPreviousIfHasOnlyOneWallpaper() {
+        Wallpaper next = earthPornSite.nextWallpaper();
+        assertFalse(earthPornSite.hasPrevious());
+    }
+
+    @Test
+    public void previousMustBeDifferentFromCurrentWallpaper() {
+        earthPornSite.nextWallpaper();
+        Wallpaper current = earthPornSite.nextWallpaper();
+        assertFalse(current.equals(earthPornSite.previousWallpaper()));
     }
 
     private String getHTMLContent() {
