@@ -13,9 +13,9 @@ import javax.swing.*;
 import javax.swing.event.MouseInputListener;
 import java.awt.*;
 import java.awt.event.MouseEvent;
+import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.logging.Logger;
-import java.util.List;
 
 import static com.humbertopinheiro.ui.PanelSideToPaint.*;
 
@@ -36,6 +36,8 @@ public class WallpaperPanel extends JPanel implements MouseInputListener {
     private WallpaperProvider wallpaperProvider;
 
     private LoadingWallpaper loadingWallpaper = new LoadingWallpaper();
+
+    private Wallpaper currentWallpaper;
 
     private List<WallpaperPanelEventListener> wallpaperPanelEventListenerList = Lists.newArrayList();
 
@@ -91,36 +93,31 @@ public class WallpaperPanel extends JPanel implements MouseInputListener {
 
     @Override
     public void mouseMoved(MouseEvent e) {
-        if (mouseEnteredLeftSide(e.getX(), e.getY())) {
-            panelSideToPaint = LEFT;
-            repaint();
-        } else if (mouseEnteredRightSide(e.getX(), e.getY())) {
-            panelSideToPaint = RIGHT;
-            repaint();
-        } else if (mouseEnteredCenter(e.getX(), e.getY())) {
-            panelSideToPaint = NONE;
-            repaint();
+        if (wallpaperProvider == null) {
+            setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        } else if (mouseEnteredLeftSide(e.getX(), e.getY()) && wallpaperProvider.hasPrevious()) {
+            setCursor(new Cursor(Cursor.HAND_CURSOR));
+        } else if (mouseEnteredRightSide(e.getX(), e.getY()) && wallpaperProvider.hasNext()) {
+            setCursor(new Cursor(Cursor.HAND_CURSOR));
+        } else {
+            setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         }
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+        Graphics2D graphics = (Graphics2D) g.create();
         if (backgroundImage != null) {
             int width = backgroundImage.getWidth(this);
             int height = backgroundImage.getHeight(this);
-            g.drawImage(backgroundImage,
+            graphics.drawImage(backgroundImage,
                     (getWidth() / 2) - (width / 2),
                     (getHeight() / 2) - (height / 2),
                     this);
 
-            paintSideShadow(g);
+            paintSideShadow(graphics);
         }
-    }
-
-    private boolean mouseEnteredCenter(int x, int y) {
-        return panelSideToPaint != NONE &&
-                !(insideLeftSide(x, y) || insideRightSide(x, y));
     }
 
     private boolean mouseEnteredRightSide(int x, int y) {
@@ -148,31 +145,30 @@ public class WallpaperPanel extends JPanel implements MouseInputListener {
                 (int) (getWidth() * SIDE_WIDTH_PERC), getHeight());
     }
 
-    private void paintSideShadow(Graphics g) {
-        Rectangle side = null;
-        String text = "";
-        if (wallpaperProvider.hasPrevious() && panelSideToPaint == LEFT) {
-            side = getLeftSide();
-            text = "PREVIOUS";
-        } else if (wallpaperProvider.hasNext() && panelSideToPaint == RIGHT) {
-            side = getRightSide();
-            text = "NEXT";
+    private void paintSideShadow(Graphics2D g) {
+        if (currentWallpaper == loadingWallpaper) {
+            return;
         }
-        if (side != null) {
-            g.setColor(new Color(0, 0, 0, 0.5f));
-            g.fillRect(side.x, side.y, side.width, side.height);
-            drawSimpleString(g, text, side.width, side.x, side.y);
-            setCursor(new Cursor(Cursor.HAND_CURSOR));
-        } else {
-            setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_ON);
+        if (wallpaperProvider.hasPrevious()) {
+            paintSide(g, getLeftSide(), "<");
+        }
+        if (wallpaperProvider.hasNext()) {
+            paintSide(g, getRightSide(), ">");
         }
     }
 
-    private void drawSimpleString(Graphics g, String s, int width, int x, int y){
-        int stringLen = (int)
-                g.getFontMetrics().getStringBounds(s, g).getWidth();
-        int start = width/2 - stringLen/2;
-        g.drawString(s, start + x, y);
+    private void paintSide(Graphics2D g, Rectangle rectangle, String text) {
+        g.setColor(new Color(0, 0, 0, 0.5f));
+        g.fillRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
+        g.setColor(Color.WHITE);
+        g.setFont(new Font("Dialog", Font.BOLD, 48));
+        FontMetrics fm = g.getFontMetrics();
+        int totalWidth = (fm.stringWidth(text) * 2) + 4;
+        int x = rectangle.x + (rectangle.width - totalWidth) / 2;
+        int y = (rectangle.height - fm.getHeight()) / 2;
+        g.drawString(text, x, y + ((fm.getDescent() + fm.getAscent()) / 2));
     }
 
     private void paintNextWallpaper() {
@@ -195,11 +191,7 @@ public class WallpaperPanel extends JPanel implements MouseInputListener {
 
     private void paintFutureWallpaper(ListenableFuture<Wallpaper> futureWallpaper) {
         paintWallpaper(loadingWallpaper);
-        paintWallpaperWhenReady(futureWallpaper);
-    }
-
-    private void paintWallpaperWhenReady(ListenableFuture<Wallpaper> future) {
-        Futures.addCallback(future, new FutureCallback<Wallpaper>() {
+        Futures.addCallback(futureWallpaper, new FutureCallback<Wallpaper>() {
             @Override
             public void onSuccess(Wallpaper wallpaper) {
                 paintWallpaper(wallpaper);
@@ -217,6 +209,7 @@ public class WallpaperPanel extends JPanel implements MouseInputListener {
         for (WallpaperPanelEventListener listener : wallpaperPanelEventListenerList) {
             listener.wallpaperUpdated(wallpaper);
         }
+        currentWallpaper = wallpaper;
         repaint();
     }
 
