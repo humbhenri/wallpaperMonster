@@ -1,10 +1,15 @@
 package com.humbertopinheiro.application;
 
 import com.google.common.util.concurrent.ListeningExecutorService;
-import com.google.common.util.concurrent.MoreExecutors;
+import com.humbertopinheiro.wallpaper.Wallpaper;
 import com.humbertopinheiro.wallpaper.WallpaperProvider;
 
-import java.util.concurrent.Executors;
+import java.nio.file.Path;
+import java.util.logging.Logger;
+
+import static com.google.common.util.concurrent.MoreExecutors.listeningDecorator;
+import static java.util.concurrent.Executors.newFixedThreadPool;
+import static java.util.logging.Logger.getLogger;
 
 /**
  * Created with IntelliJ IDEA.
@@ -18,8 +23,27 @@ public enum Application {
 
     private WallpaperProvider[] wallpaperProviders;
     private String wallpaperStore;
-    private ListeningExecutorService pool =
-            MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(10));
+    private ListeningExecutorService pool = listeningDecorator(newFixedThreadPool(10));
+    private WallpaperSaver wallpaperSaver;
+    private final static Logger LOGGER = getLogger(Application.class.getName());
+
+    Application() {
+        final String OS = System.getProperty("os.name").toLowerCase();
+        if (OS.indexOf("mac") >= 0) {
+            wallpaperSaver = new MacWallpaperSaver();
+        } else {
+            wallpaperSaver = new WallpaperSaver() {
+                @Override
+                protected String getUserPathImagesFolder() {
+                    return null;
+                }
+                @Override
+                protected void setWallpaperBackground(Path path) {
+                    LOGGER.info("Not implemented for this operating system.");
+                }
+            };
+        }
+    }
 
     public Application setWallpaperProviders(WallpaperProvider[] providers) {
         this.wallpaperProviders = providers;
@@ -41,5 +65,9 @@ public enum Application {
 
     public ListeningExecutorService pool() {
         return pool;
+    }
+
+    public void saveWallpaper(Wallpaper wallpaper) {
+        wallpaperSaver.saveAsBackground(wallpaper);
     }
 }

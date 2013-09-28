@@ -10,4 +10,5 @@ import com.humbertopinheiro.wallpaper.Wallpaper;
  */
 public interface WallpaperPanelEventListener {
     void wallpaperUpdated(Wallpaper wallpaper);
+    void wallpaperSelected(Wallpaper wallpaper);
 }

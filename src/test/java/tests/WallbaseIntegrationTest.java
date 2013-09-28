@@ -2,12 +2,10 @@ package tests;
 
 import com.humbertopinheiro.application.Application;
 import com.humbertopinheiro.utils.ImageExtension;
-import com.humbertopinheiro.wallpaper.EarthPornSite;
+import com.humbertopinheiro.wallpaper.Wallbase;
 import com.humbertopinheiro.wallpaper.Wallpaper;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.runners.MockitoJUnitRunner;
 
 import java.io.File;
 
@@ -16,11 +14,10 @@ import static junit.framework.Assert.assertTrue;
 /**
  * Created with IntelliJ IDEA.
  * User: humberto
- * Date: 13/09/13
- * Time: 22:28
+ * Date: 24/09/13
+ * Time: 22:20
  */
-@RunWith(MockitoJUnitRunner.class)
-public class EarthPornSiteIntegrationTest {
+public class WallbaseIntegrationTest {
 
     @BeforeClass
     public static void setUpClass() {
@@ -29,8 +26,8 @@ public class EarthPornSiteIntegrationTest {
 
     @Test
     public void shouldDownloadImage() {
-        EarthPornSite earthPornSite = new EarthPornSite();
-        Wallpaper wallpaper = earthPornSite.nextWallpaper();
+        Wallbase wallbase = new Wallbase();
+        Wallpaper wallpaper = wallbase.nextWallpaper();
         assertTrue(new File(wallpaper.getFilename()).exists());
         assertTrue(new ImageExtension(wallpaper.getFilename()).isValid());
     }

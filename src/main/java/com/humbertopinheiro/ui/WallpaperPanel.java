@@ -1,8 +1,6 @@
 package com.humbertopinheiro.ui;
 
-import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.FutureCallback;
-import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.humbertopinheiro.application.Application;
 import com.humbertopinheiro.wallpaper.LoadingWallpaper;
@@ -12,12 +10,18 @@ import com.humbertopinheiro.wallpaper.WallpaperProvider;
 import javax.swing.*;
 import javax.swing.event.MouseInputListener;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.logging.Logger;
 
+import static ch.lambdaj.Lambda.forEach;
+import static com.google.common.collect.Lists.newArrayList;
+import static com.google.common.util.concurrent.Futures.addCallback;
 import static com.humbertopinheiro.ui.PanelSideToPaint.*;
+import static java.util.logging.Logger.getLogger;
 
 /**
  * Created with IntelliJ IDEA.
@@ -39,9 +43,9 @@ public class WallpaperPanel extends JPanel implements MouseInputListener {
 
     private Wallpaper currentWallpaper;
 
-    private List<WallpaperPanelEventListener> wallpaperPanelEventListenerList = Lists.newArrayList();
+    private List<WallpaperPanelEventListener> wallpaperPanelEventListenerList = newArrayList();
 
-    private final static Logger LOGGER = Logger.getLogger(WallpaperPanel.class.getName());
+    private final static Logger LOGGER = getLogger(WallpaperPanel.class.getName());
 
     public WallpaperPanel(WallpaperProvider wallpaperProvider) {
         addMouseListener(this);
@@ -73,6 +77,18 @@ public class WallpaperPanel extends JPanel implements MouseInputListener {
 
     @Override
     public void mousePressed(MouseEvent e) {
+        if (e.getButton() == MouseEvent.BUTTON3) {
+            JPopupMenu menu = new JPopupMenu ();
+            JMenuItem menuItem = new JMenuItem("Save as wallpaper");
+            menuItem.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    forEach(wallpaperPanelEventListenerList).wallpaperSelected(currentWallpaper);
+                }
+            });
+            menu.add(menuItem);
+            menu.show(this, e.getX(), e.getY());
+        }
     }
 
     @Override
@@ -191,7 +207,7 @@ public class WallpaperPanel extends JPanel implements MouseInputListener {
 
     private void paintFutureWallpaper(ListenableFuture<Wallpaper> futureWallpaper) {
         paintWallpaper(loadingWallpaper);
-        Futures.addCallback(futureWallpaper, new FutureCallback<Wallpaper>() {
+        addCallback(futureWallpaper, new FutureCallback<Wallpaper>() {
             @Override
             public void onSuccess(Wallpaper wallpaper) {
                 paintWallpaper(wallpaper);
@@ -206,9 +222,7 @@ public class WallpaperPanel extends JPanel implements MouseInputListener {
 
     private void paintWallpaper(Wallpaper wallpaper) {
         backgroundImage = getToolkit().createImage(wallpaper.getFilename());
-        for (WallpaperPanelEventListener listener : wallpaperPanelEventListenerList) {
-            listener.wallpaperUpdated(wallpaper);
-        }
+        forEach(wallpaperPanelEventListenerList).wallpaperUpdated(wallpaper);
         currentWallpaper = wallpaper;
         repaint();
     }

@@ -33,4 +33,9 @@ public class URLUtils {
         String[] split = StringUtils.split(url.toString(), "/");
         return split[split.length - 1];
     }
+
+    public String lastComponent(String url) {
+        String[] split = StringUtils.split(url, "/");
+        return split[split.length - 1];
+    }
 }

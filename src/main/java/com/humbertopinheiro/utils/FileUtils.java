@@ -1,11 +1,16 @@
 package com.humbertopinheiro.utils;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.logging.Logger;
+
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
 /**
  * Created with IntelliJ IDEA.
@@ -31,6 +36,15 @@ public class FileUtils {
         } catch (IOException e) {
             LOGGER.severe(e.getMessage());
         }
+    }
+
+    public Path copy(File src, File dst) {
+        try {
+            return Files.copy(src.toPath(), dst.toPath(), REPLACE_EXISTING);
+        } catch (IOException e) {
+            LOGGER.severe(e.getMessage());
+        }
+        return null;
     }
 
 }

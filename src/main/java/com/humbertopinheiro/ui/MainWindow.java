@@ -1,10 +1,7 @@
 package com.humbertopinheiro.ui;
 
 import com.humbertopinheiro.application.Application;
-import com.humbertopinheiro.wallpaper.EarthPornSite;
-import com.humbertopinheiro.wallpaper.MockWallpaperProvider;
-import com.humbertopinheiro.wallpaper.Wallpaper;
-import com.humbertopinheiro.wallpaper.WallpaperProvider;
+import com.humbertopinheiro.wallpaper.*;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
@@ -68,7 +65,7 @@ public class MainWindow extends JFrame implements WallpaperPanelEventListener {
     }
 
     private static void setupApplication() {
-        WallpaperProvider[] providers = {new EarthPornSite(), new MockWallpaperProvider()};
+        WallpaperProvider[] providers = {new EarthPornSite(), new MockWallpaperProvider(), new Wallbase()};
         Application.INSTANCE.setWallpaperProviders(providers)
                 .setWallpaperStore("/tmp/");
     }
@@ -76,6 +73,11 @@ public class MainWindow extends JFrame implements WallpaperPanelEventListener {
     @Override
     public void wallpaperUpdated(final Wallpaper wallpaper) {
         setTitleFromWallpaper(wallpaper);
+    }
+
+    @Override
+    public void wallpaperSelected(Wallpaper wallpaper) {
+        Application.INSTANCE.saveWallpaper(wallpaper);
     }
 
     private void setTitleFromWallpaper(final Wallpaper wallpaper) {
