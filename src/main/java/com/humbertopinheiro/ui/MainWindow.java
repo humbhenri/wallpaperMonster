@@ -1,10 +1,13 @@
 package com.humbertopinheiro.ui;
 
 import com.humbertopinheiro.application.Application;
+import com.humbertopinheiro.application.SystemProperties;
 import com.humbertopinheiro.wallpaper.*;
+
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -57,19 +60,6 @@ public class MainWindow extends JFrame implements WallpaperPanelEventListener {
         return label;
     }
 
-    public static void main(String... args) {
-        setupApplication();
-        MainWindow mainWindow = new MainWindow();
-        mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        mainWindow.setVisible(true);
-    }
-
-    private static void setupApplication() {
-        WallpaperProvider[] providers = {new EarthPornSite(), new MockWallpaperProvider(), new Wallbase()};
-        Application.INSTANCE.setWallpaperProviders(providers)
-                .setWallpaperStore("/tmp/");
-    }
-
     @Override
     public void wallpaperUpdated(final Wallpaper wallpaper) {
         setTitleFromWallpaper(wallpaper);
@@ -87,5 +77,18 @@ public class MainWindow extends JFrame implements WallpaperPanelEventListener {
                 setTitle(wallpaper.getTitle());
             }
         });
+    }
+    
+    public static void main(String... args) {
+        setupApplication();
+        MainWindow mainWindow = new MainWindow();
+        mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        mainWindow.setVisible(true);
+    }
+
+    private static void setupApplication() {
+        WallpaperProvider[] providers = {new EarthPornSite(), new MockWallpaperProvider(), new Wallbase()};
+        Application.INSTANCE.setWallpaperProviders(providers)
+                .setWallpaperStore(SystemProperties.INSTANCE.getTempDir());
     }
 }

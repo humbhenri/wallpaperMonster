@@ -1,7 +1,11 @@
 package com.humbertopinheiro.utils;
 
+import static java.io.File.pathSeparator;
+import static org.apache.commons.lang3.StringUtils.split;
+
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.logging.Logger;
@@ -30,12 +34,12 @@ public class URLUtils {
     }
 
     public String lastComponent(URL url) {
-        String[] split = StringUtils.split(url.toString(), "/");
+        String[] split = split(url.toString(), "/");
         return split[split.length - 1];
     }
 
     public String lastComponent(String url) {
-        String[] split = StringUtils.split(url, "/");
+        String[] split = StringUtils.split(url, "\\/");
         return split[split.length - 1];
     }
 }

@@ -1,9 +1,11 @@
 package tests;
 
 import com.humbertopinheiro.application.Application;
+import com.humbertopinheiro.application.SystemProperties;
 import com.humbertopinheiro.utils.ImageExtension;
 import com.humbertopinheiro.wallpaper.EarthPornSite;
 import com.humbertopinheiro.wallpaper.Wallpaper;
+
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,7 +26,7 @@ public class EarthPornSiteIntegrationTest {
 
     @BeforeClass
     public static void setUpClass() {
-        Application.INSTANCE.setWallpaperStore("/tmp");
+        Application.INSTANCE.setWallpaperStore(SystemProperties.INSTANCE.getTempDir());
     }
 
     @Test

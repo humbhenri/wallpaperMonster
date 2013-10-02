@@ -7,22 +7,23 @@ package com.humbertopinheiro.wallpaper;
  * Time: 20:43
  */
 
-import com.humbertopinheiro.utils.FileUtils;
-import com.humbertopinheiro.utils.ImageExtension;
-import com.humbertopinheiro.utils.URLUtils;
-import org.jsoup.nodes.Element;
+import static com.google.common.collect.Lists.newArrayList;
 
 import java.util.Iterator;
 import java.util.List;
 
-import static com.google.common.collect.Lists.newArrayList;
+import org.jsoup.nodes.Element;
+
+import com.humbertopinheiro.utils.FileUtils;
+import com.humbertopinheiro.utils.ImageExtension;
+import com.humbertopinheiro.utils.URLUtils;
 
 public abstract class WallpaperProvider {
 
     private URLDownloader urlDownloader;
     private Iterator<Element> linkIterator;
     private FileUtils fileUtils = new FileUtils();
-    private List<Wallpaper> wallpapers = newArrayList(null);
+    private List<Wallpaper> wallpapers = newArrayList(new Wallpaper(""));
     private int currentWallpaper = 0;
 
     public WallpaperProvider() {

@@ -1,9 +1,11 @@
 package tests;
 
 import com.humbertopinheiro.application.Application;
+import com.humbertopinheiro.application.SystemProperties;
 import com.humbertopinheiro.utils.ImageExtension;
 import com.humbertopinheiro.wallpaper.Wallbase;
 import com.humbertopinheiro.wallpaper.Wallpaper;
+
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -21,7 +23,7 @@ public class WallbaseIntegrationTest {
 
     @BeforeClass
     public static void setUpClass() {
-        Application.INSTANCE.setWallpaperStore("/tmp");
+    	Application.INSTANCE.setWallpaperStore(SystemProperties.INSTANCE.getTempDir());
     }
 
     @Test

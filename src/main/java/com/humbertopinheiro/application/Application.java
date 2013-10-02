@@ -28,10 +28,13 @@ public enum Application {
     private final static Logger LOGGER = getLogger(Application.class.getName());
 
     Application() {
-        final String OS = System.getProperty("os.name").toLowerCase();
+        final String OS = SystemProperties.INSTANCE.getOS().toLowerCase();
         if (OS.indexOf("mac") >= 0) {
             wallpaperSaver = new MacWallpaperSaver();
-        } else {
+        } else if (OS.indexOf("win") >= 0) {
+        	wallpaperSaver = new WinWallpaperSaver();
+        }
+        else {
             wallpaperSaver = new WallpaperSaver() {
                 @Override
                 protected String getUserPathImagesFolder() {

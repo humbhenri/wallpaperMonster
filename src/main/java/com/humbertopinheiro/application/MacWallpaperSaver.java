@@ -20,7 +20,7 @@ public class MacWallpaperSaver extends WallpaperSaver {
 
     @Override
     protected String getUserPathImagesFolder() {
-        return new File(getProperty("user.home"), "Pictures").getAbsolutePath();
+        return SystemProperties.INSTANCE.getUserHomePictures();
     }
 
     @Override
