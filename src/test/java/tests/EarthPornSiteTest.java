@@ -5,6 +5,7 @@ import com.humbertopinheiro.utils.ImageExtension;
 import com.humbertopinheiro.wallpaper.EarthPornSite;
 import com.humbertopinheiro.wallpaper.URLDownloader;
 import com.humbertopinheiro.wallpaper.Wallpaper;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,7 +16,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import java.io.InputStream;
 import java.net.URL;
 
-import static junit.framework.Assert.*;
+import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doNothing;
@@ -65,7 +66,6 @@ public class EarthPornSiteTest {
 
     @Test
     public void shouldNotHasPreviousIfHasOnlyOneWallpaper() {
-        Wallpaper next = earthPornSite.nextWallpaper();
         assertFalse(earthPornSite.hasPrevious());
     }
 

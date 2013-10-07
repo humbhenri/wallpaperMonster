@@ -31,7 +31,9 @@ import static java.util.logging.Logger.getLogger;
  */
 public class WallpaperPanel extends JPanel implements MouseInputListener {
 
-    private static final double SIDE_WIDTH_PERC = 0.1;
+	private static final long serialVersionUID = 1L;
+
+	private static final double SIDE_WIDTH_PERC = 0.1;
 
     private Image backgroundImage;
 

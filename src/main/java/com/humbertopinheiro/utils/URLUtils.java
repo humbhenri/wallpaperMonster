@@ -1,14 +1,12 @@
 package com.humbertopinheiro.utils;
 
-import static java.io.File.pathSeparator;
 import static org.apache.commons.lang3.StringUtils.split;
 
-import org.apache.commons.lang3.StringUtils;
-
-import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.logging.Logger;
+
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Created with IntelliJ IDEA.

@@ -1,5 +1,7 @@
 package tests;
 
+import static org.junit.Assert.*;
+
 import com.humbertopinheiro.application.Application;
 import com.humbertopinheiro.application.SystemProperties;
 import com.humbertopinheiro.utils.ImageExtension;
@@ -11,7 +13,6 @@ import org.junit.Test;
 
 import java.io.File;
 
-import static junit.framework.Assert.assertTrue;
 
 /**
  * Created with IntelliJ IDEA.

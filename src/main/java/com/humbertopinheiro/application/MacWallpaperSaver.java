@@ -1,13 +1,11 @@
 package com.humbertopinheiro.application;
 
-import java.io.File;
+import static java.lang.Runtime.getRuntime;
+import static java.util.logging.Logger.getLogger;
+
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.logging.Logger;
-
-import static java.lang.Runtime.getRuntime;
-import static java.lang.System.getProperty;
-import static java.util.logging.Logger.getLogger;
 
 /**
  * Created with IntelliJ IDEA.

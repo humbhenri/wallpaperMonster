@@ -1,17 +1,14 @@
 package com.humbertopinheiro.application;
 
-import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
-import static org.apache.commons.lang3.StringUtils.split;
-
 import java.io.File;
 import java.nio.file.Path;
 import java.util.HashMap;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.sun.jna.Native;
 import com.sun.jna.platform.win32.WinDef.UINT_PTR;
-import com.sun.jna.win32.*;
+import com.sun.jna.win32.StdCallLibrary;
+import com.sun.jna.win32.W32APIFunctionMapper;
+import com.sun.jna.win32.W32APITypeMapper;
 
 public class WinWallpaperSaver extends WallpaperSaver {
 

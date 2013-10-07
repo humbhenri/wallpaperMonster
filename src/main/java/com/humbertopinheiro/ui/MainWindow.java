@@ -20,7 +20,9 @@ import java.awt.event.ActionListener;
  */
 public class MainWindow extends JFrame implements WallpaperPanelEventListener {
 
-    private final WallpaperPanel wallpaperPanel;
+	private static final long serialVersionUID = 1L;
+	
+	private final WallpaperPanel wallpaperPanel;
 
     public MainWindow() {
         setTitle("wallpaperMonster");

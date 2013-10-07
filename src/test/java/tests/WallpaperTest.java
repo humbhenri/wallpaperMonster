@@ -7,7 +7,6 @@ import com.humbertopinheiro.application.SystemProperties;
 import com.humbertopinheiro.utils.URLUtils;
 import com.humbertopinheiro.wallpaper.Wallpaper;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
