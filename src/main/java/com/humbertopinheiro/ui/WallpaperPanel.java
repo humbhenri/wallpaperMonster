@@ -119,7 +119,7 @@ public class WallpaperPanel extends MouseListenerPanel {
 	}
 
 	private boolean mouseEnteredLeftSide() {
-		return panelSideToPaint != LEFT && bounds.insideRightSide();
+		return panelSideToPaint != LEFT && bounds.insideLeftSide();
 	}
 
 	private void paintFutureWallpaper(
