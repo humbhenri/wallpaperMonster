@@ -3,10 +3,12 @@ package com.humbertopinheiro.wallpaper;
 import java.util.concurrent.Callable;
 
 import com.google.common.util.concurrent.ListenableFuture;
-import com.humbertopinheiro.application.Application;
+import com.humbertopinheiro.application.ThreadPool;
 import com.humbertopinheiro.base.Side;
 
 public class FutureWallpaperProvider {
+
+	private final ThreadPool threadPool = new ThreadPool();
 
 	private WallpaperProvider wallpaperProvider;
 
@@ -31,26 +33,24 @@ public class FutureWallpaperProvider {
 
 	private ListenableFuture<Wallpaper> nextWallpaper() {
 		if (wallpaperProvider.hasNext()) {
-			return Application.INSTANCE.pool().submit(
-					new Callable<Wallpaper>() {
-						@Override
-						public Wallpaper call() {
-							return wallpaperProvider.nextWallpaper();
-						}
-					});
+			return threadPool.pool().submit(new Callable<Wallpaper>() {
+				@Override
+				public Wallpaper call() {
+					return wallpaperProvider.nextWallpaper();
+				}
+			});
 		}
 		return null;
 	}
 
 	private ListenableFuture<Wallpaper> previousWallpaper() {
 		if (wallpaperProvider.hasPrevious()) {
-			return Application.INSTANCE.pool().submit(
-					new Callable<Wallpaper>() {
-						@Override
-						public Wallpaper call() {
-							return wallpaperProvider.previousWallpaper();
-						}
-					});
+			return threadPool.pool().submit(new Callable<Wallpaper>() {
+				@Override
+				public Wallpaper call() {
+					return wallpaperProvider.previousWallpaper();
+				}
+			});
 		}
 		return null;
 	}

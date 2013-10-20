@@ -14,14 +14,11 @@ import javax.swing.SwingUtilities;
 
 import net.miginfocom.swing.MigLayout;
 
-import com.humbertopinheiro.application.Application;
-import com.humbertopinheiro.application.SystemProperties;
-import com.humbertopinheiro.wallpaper.EarthPornSite;
+import com.humbertopinheiro.platform.Platform;
 import com.humbertopinheiro.wallpaper.EmptyWallpaperProvider;
-import com.humbertopinheiro.wallpaper.MockWallpaperProvider;
-import com.humbertopinheiro.wallpaper.Wallbase;
 import com.humbertopinheiro.wallpaper.Wallpaper;
 import com.humbertopinheiro.wallpaper.WallpaperProvider;
+import com.humbertopinheiro.wallpaper.WallpaperProviders;
 
 /**
  * Created with IntelliJ IDEA. User: humberto Date: 05/09/13 Time: 23:01
@@ -31,6 +28,10 @@ public class MainWindow extends JFrame implements WallpaperPanelEventListener {
 	private static final long serialVersionUID = 1L;
 
 	private final WallpaperPanel wallpaperPanel;
+
+	private final Platform platform = new Platform();
+
+	private final WallpaperProviders wallpaperProviders = new WallpaperProviders();
 
 	public MainWindow() {
 		setTitle("wallpaperMonster");
@@ -48,7 +49,7 @@ public class MainWindow extends JFrame implements WallpaperPanelEventListener {
 
 	private Component getProvidersList() {
 		final JComboBox<WallpaperProvider> wallpaperProviderJComboBox = new JComboBox<>(
-				Application.INSTANCE.getWallpaperProviders());
+				wallpaperProviders.getWallpaperProviders());
 		wallpaperProviderJComboBox.setName("wallpaperProviders");
 		addChangeWallpaperListener(wallpaperProviderJComboBox);
 		return wallpaperProviderJComboBox;
@@ -79,7 +80,7 @@ public class MainWindow extends JFrame implements WallpaperPanelEventListener {
 
 	@Override
 	public void wallpaperSelected(Wallpaper wallpaper) {
-		Application.INSTANCE.saveWallpaper(wallpaper);
+		platform.getWallpaperSaver().saveAsBackground(wallpaper);
 	}
 
 	private void setTitleFromWallpaper(final Wallpaper wallpaper) {
@@ -92,16 +93,8 @@ public class MainWindow extends JFrame implements WallpaperPanelEventListener {
 	}
 
 	public static void main(String... args) {
-		setupApplication();
 		MainWindow mainWindow = new MainWindow();
 		mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainWindow.setVisible(true);
-	}
-
-	private static void setupApplication() {
-		WallpaperProvider[] providers = { new EarthPornSite(),
-				new MockWallpaperProvider(), new Wallbase() };
-		Application.INSTANCE.setWallpaperProviders(providers)
-				.setWallpaperStore(SystemProperties.INSTANCE.getTempDir());
 	}
 }

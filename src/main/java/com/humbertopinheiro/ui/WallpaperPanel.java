@@ -31,6 +31,18 @@ import com.humbertopinheiro.wallpaper.WallpaperProvider;
  */
 public class WallpaperPanel extends MouseListenerPanel {
 
+	public class PaintWallpaperCallback implements FutureCallback<Wallpaper> {
+		@Override
+		public void onSuccess(Wallpaper wallpaper) {
+			paintWallpaper(wallpaper);
+		}
+
+		@Override
+		public void onFailure(Throwable throwable) {
+			LOGGER.severe(throwable.getMessage());
+		}
+	}
+
 	private static final long serialVersionUID = 1L;
 
 	private final static Logger LOGGER = getLogger(WallpaperPanel.class
@@ -58,10 +70,6 @@ public class WallpaperPanel extends MouseListenerPanel {
 		this.wallpaperProvider = wallpaperProvider;
 		futureWallpaperProvider.setWallpaperProvider(wallpaperProvider);
 		bounds = new Bounds(this);
-	}
-
-	public WallpaperProvider getWallpaperProvider() {
-		return wallpaperProvider;
 	}
 
 	public void setWallpaperProvider(WallpaperProvider wallpaperProvider) {
@@ -128,17 +136,7 @@ public class WallpaperPanel extends MouseListenerPanel {
 			return;
 		}
 		paintWallpaper(loadingWallpaper);
-		addCallback(futureWallpaper, new FutureCallback<Wallpaper>() {
-			@Override
-			public void onSuccess(Wallpaper wallpaper) {
-				paintWallpaper(wallpaper);
-			}
-
-			@Override
-			public void onFailure(Throwable throwable) {
-				LOGGER.severe(throwable.getMessage());
-			}
-		});
+		addCallback(futureWallpaper, new PaintWallpaperCallback());
 	}
 
 	private void paintWallpaper(Wallpaper wallpaper) {

@@ -1,5 +1,7 @@
 package com.humbertopinheiro.wallpaper;
 
+import static com.google.common.io.Resources.getResource;
+
 import java.util.Iterator;
 
 import org.jsoup.nodes.Element;
@@ -11,6 +13,9 @@ import com.humbertopinheiro.utils.URLUtils;
  * Created with IntelliJ IDEA. User: humberto Date: 12/09/13 Time: 22:35
  */
 public class MockWallpaperProvider extends WallpaperProvider {
+
+	private final FileUtils fileUtils = new FileUtils();
+
 	@Override
 	protected Iterator<Element> getLinkIterator() {
 		return null;
@@ -23,11 +28,9 @@ public class MockWallpaperProvider extends WallpaperProvider {
 
 	@Override
 	public Wallpaper nextWallpaper() {
-		Wallpaper wallpaper = new Wallpaper(
-				MockWallpaperProvider.class.getResource("/sample.jpg"), null);
+		Wallpaper wallpaper = new Wallpaper(getResource("/sample.jpg"), null);
 		wallpaper.setTitle(new URLUtils().titleFromURL(wallpaper.getURL()));
-		new FileUtils()
-				.saveFromUrl(wallpaper.getURL(), wallpaper.getFilename());
+		fileUtils.saveFromUrl(wallpaper.getURL(), wallpaper.getFilename());
 		return wallpaper;
 	}
 
