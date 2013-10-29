@@ -18,4 +18,8 @@ public enum SystemProperties {
 		return new File(getProperty("user.home"), "Pictures").getAbsolutePath();
 	}
 
+	public String getUserHome() {
+		return getProperty("user.home");
+	}
+	
 }
