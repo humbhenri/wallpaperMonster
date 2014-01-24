@@ -16,6 +16,8 @@ import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.humbertopinheiro.ui.MainWindow;
+import com.humbertopinheiro.ui.WallpaperPanel;
+import com.humbertopinheiro.wallpaper.EmptyWallpaperProvider;
 
 /**
  * Created with IntelliJ IDEA. User: humberto Date: 05/09/13 Time: 22:56
@@ -37,7 +39,8 @@ public class MainWindowTest {
 				.execute(new GuiQuery<MainWindow>() {
 					@Override
 					protected MainWindow executeInEDT() {
-						return new MainWindow();
+						return new MainWindow(new WallpaperPanel(
+								new EmptyWallpaperProvider()));
 					}
 				});
 		window = new FrameFixture(mainWindow);

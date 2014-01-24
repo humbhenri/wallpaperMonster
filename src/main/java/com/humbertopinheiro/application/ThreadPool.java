@@ -5,13 +5,15 @@ import static java.util.concurrent.Executors.newFixedThreadPool;
 
 import com.google.common.util.concurrent.ListeningExecutorService;
 
-public class ThreadPool {
+public enum ThreadPool {
+
+	INSTANCE;
 
 	private static final int MAX_THREADS = 10;
 
 	private final ListeningExecutorService pool = listeningDecorator(newFixedThreadPool(MAX_THREADS));
 
 	public ListeningExecutorService pool() {
-		return pool;
+		return INSTANCE.pool;
 	}
 }

@@ -5,6 +5,7 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -14,7 +15,11 @@ import javax.swing.SwingUtilities;
 
 import net.miginfocom.swing.MigLayout;
 
-import com.humbertopinheiro.platform.Platform;
+import org.apache.commons.lang3.StringUtils;
+
+import com.humbertopinheiro.application.SystemProperties;
+import com.humbertopinheiro.platform.LinuxWallpaperSaverFactory;
+import com.humbertopinheiro.platform.WallpaperSaverFactory;
 import com.humbertopinheiro.wallpaper.EmptyWallpaperProvider;
 import com.humbertopinheiro.wallpaper.Wallpaper;
 import com.humbertopinheiro.wallpaper.WallpaperProvider;
@@ -29,11 +34,11 @@ public class MainWindow extends JFrame implements WallpaperPanelEventListener {
 
 	private final WallpaperPanel wallpaperPanel;
 
-	private final Platform platform = new Platform();
-
 	private final WallpaperProviders wallpaperProviders = new WallpaperProviders();
 
-	public MainWindow() {
+	private WallpaperSaverFactory wallpaperSaverFactory;
+
+	public MainWindow(WallpaperPanel wallpaperPanel) {
 		setTitle("wallpaperMonster");
 		Container pane = getContentPane();
 		pane.setLayout(new MigLayout("", "[grow]", "[grow]"));
@@ -41,7 +46,7 @@ public class MainWindow extends JFrame implements WallpaperPanelEventListener {
 		header.add(getInfoLabel());
 		header.add(getProvidersList());
 		pane.add(header, "dock north");
-		wallpaperPanel = new WallpaperPanel(new EmptyWallpaperProvider());
+		this.wallpaperPanel = wallpaperPanel;
 		wallpaperPanel.addWallpaperPanelEventListener(this);
 		pane.add(wallpaperPanel, "grow");
 		setSize(new Dimension(1024, 768));
@@ -80,7 +85,9 @@ public class MainWindow extends JFrame implements WallpaperPanelEventListener {
 
 	@Override
 	public void wallpaperSelected(Wallpaper wallpaper) {
-		platform.getWallpaperSaver().saveAsBackground(wallpaper);
+		String os = SystemProperties.instance().getOS().toLowerCase();
+		getWallpaperSaverFactory().getWallpaperSaver(os)
+				.setWallpaperBackground(new File(wallpaper.getFilename()));
 	}
 
 	private void setTitleFromWallpaper(final Wallpaper wallpaper) {
@@ -93,8 +100,24 @@ public class MainWindow extends JFrame implements WallpaperPanelEventListener {
 	}
 
 	public static void main(String... args) {
-		MainWindow mainWindow = new MainWindow();
+		MainWindow mainWindow = new MainWindow(new WallpaperPanel(
+				new EmptyWallpaperProvider()));
+		WallpaperSaverFactory wallpaperSaverFactory = new WallpaperSaverFactory();
+		if (StringUtils.indexOfIgnoreCase(SystemProperties.instance().getOS(),
+				"linux") > 0) {
+			wallpaperSaverFactory = new LinuxWallpaperSaverFactory();
+		}
+		mainWindow.setWallpaperSaverFactory(wallpaperSaverFactory);
 		mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainWindow.setVisible(true);
+	}
+
+	public WallpaperSaverFactory getWallpaperSaverFactory() {
+		return wallpaperSaverFactory;
+	}
+
+	public void setWallpaperSaverFactory(
+			WallpaperSaverFactory wallpaperSaverFactory) {
+		this.wallpaperSaverFactory = wallpaperSaverFactory;
 	}
 }

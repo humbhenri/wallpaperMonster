@@ -8,8 +8,6 @@ import com.humbertopinheiro.base.Side;
 
 public class FutureWallpaperProvider {
 
-	private final ThreadPool threadPool = new ThreadPool();
-
 	private WallpaperProvider wallpaperProvider;
 
 	public WallpaperProvider getWallpaperProvider() {
@@ -33,7 +31,7 @@ public class FutureWallpaperProvider {
 
 	private ListenableFuture<Wallpaper> nextWallpaper() {
 		if (wallpaperProvider.hasNext()) {
-			return threadPool.pool().submit(new Callable<Wallpaper>() {
+			return ThreadPool.INSTANCE.pool().submit(new Callable<Wallpaper>() {
 				@Override
 				public Wallpaper call() {
 					return wallpaperProvider.nextWallpaper();
@@ -45,7 +43,7 @@ public class FutureWallpaperProvider {
 
 	private ListenableFuture<Wallpaper> previousWallpaper() {
 		if (wallpaperProvider.hasPrevious()) {
-			return threadPool.pool().submit(new Callable<Wallpaper>() {
+			return ThreadPool.INSTANCE.pool().submit(new Callable<Wallpaper>() {
 				@Override
 				public Wallpaper call() {
 					return wallpaperProvider.previousWallpaper();

@@ -19,7 +19,7 @@ import com.humbertopinheiro.wallpaper.Wallpaper;
 @RunWith(JUnit4.class)
 public class WallpaperTest {
 
-	private static final String TEMP_DIR = SystemProperties.INSTANCE
+	private static final String TEMP_DIR = SystemProperties.instance()
 			.getTempDir();
 
 	@Test

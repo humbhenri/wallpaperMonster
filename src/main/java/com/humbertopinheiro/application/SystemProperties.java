@@ -4,8 +4,10 @@ import static java.lang.System.getProperty;
 
 import java.io.File;
 
-public enum SystemProperties {
-	INSTANCE;
+public class SystemProperties {
+
+	private static SystemProperties instance;
+
 	public String getTempDir() {
 		return getProperty("java.io.tmpdir");
 	}
@@ -21,5 +23,12 @@ public enum SystemProperties {
 	public String getUserHome() {
 		return getProperty("user.home");
 	}
-	
+
+	public static SystemProperties instance() {
+		if (instance == null) {
+			instance = new SystemProperties();
+		}
+		return instance;
+	}
+
 }

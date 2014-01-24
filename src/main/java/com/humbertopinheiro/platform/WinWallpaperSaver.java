@@ -1,38 +1,30 @@
 package com.humbertopinheiro.platform;
 
 import java.io.File;
-import java.nio.file.Path;
 import java.util.HashMap;
 
-import com.humbertopinheiro.application.SystemProperties;
 import com.sun.jna.Native;
 import com.sun.jna.platform.win32.WinDef.UINT_PTR;
 import com.sun.jna.win32.StdCallLibrary;
 import com.sun.jna.win32.W32APIFunctionMapper;
 import com.sun.jna.win32.W32APITypeMapper;
 
-public class WinWallpaperSaver extends WallpaperSaver {
+public class WinWallpaperSaver implements WallpaperSaver {
+	private static final long SPI_SETDESKWALLPAPER = 20;
+	private static final long SPIF_UPDATEINIFILE = 0x01;
+	private static final long SPIF_SENDWININICHANGE = 0x02;
 
 	private final SPI spi = SPI.INSTANCE;
 
 	@Override
-	protected String getUserPathImagesFolder() {
-		return SystemProperties.INSTANCE.getUserHomePictures();
-	}
-
-	@Override
-	protected void setWallpaperBackground(Path path) {
-		File file = path.toFile();
-		spi.SystemParametersInfo(new UINT_PTR(SPI.SPI_SETDESKWALLPAPER),
+	public void setWallpaperBackground(File file) {
+		spi.SystemParametersInfo(new UINT_PTR(SPI_SETDESKWALLPAPER),
 				new UINT_PTR(0), file.getAbsolutePath(), new UINT_PTR(
-						SPI.SPIF_UPDATEINIFILE | SPI.SPIF_SENDWININICHANGE));
+						SPIF_UPDATEINIFILE | SPIF_SENDWININICHANGE));
 	}
 
 	public interface SPI extends StdCallLibrary {
 		// from MSDN article
-		long SPI_SETDESKWALLPAPER = 20;
-		long SPIF_UPDATEINIFILE = 0x01;
-		long SPIF_SENDWININICHANGE = 0x02;
 
 		@SuppressWarnings("serial")
 		SPI INSTANCE = (SPI) Native.loadLibrary("user32", SPI.class,

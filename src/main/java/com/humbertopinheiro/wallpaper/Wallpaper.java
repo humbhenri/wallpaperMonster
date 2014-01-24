@@ -6,7 +6,7 @@ import java.net.URL;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import com.humbertopinheiro.application.WallpaperStore;
+import com.humbertopinheiro.application.SystemProperties;
 import com.humbertopinheiro.utils.URLUtils;
 
 /**
@@ -17,7 +17,6 @@ public class Wallpaper {
 	private URL url;
 	private String title;
 	private String filename;
-	private final WallpaperStore wallpaperStore = new WallpaperStore();
 
 	public Wallpaper(String title) {
 		this.title = title;
@@ -26,7 +25,7 @@ public class Wallpaper {
 	public Wallpaper(URL url, String title) {
 		this.title = title;
 		URLUtils urlUtils = new URLUtils();
-		this.filename = new File(wallpaperStore.getWallpaperStore(),
+		this.filename = new File(SystemProperties.instance().getTempDir(),
 				urlUtils.lastComponent(url)).getAbsolutePath();
 		this.url = url;
 	}
