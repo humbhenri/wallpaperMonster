@@ -8,6 +8,8 @@ public class WallpaperSaverFactory {
 			wallpaperSaver = new MacWallpaperSaver();
 		} else if (os.indexOf("win") >= 0) {
 			wallpaperSaver = new WinWallpaperSaver();
+		} else if (os.indexOf("linux") >= 0) {
+			wallpaperSaver = new LinuxWallpaperSaver();
 		} else {
 			wallpaperSaver = new NotImplementedWallpaperSaver();
 		}

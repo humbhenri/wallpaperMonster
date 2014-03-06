@@ -15,16 +15,13 @@ public class LinuxWallpaperSaver implements WallpaperSaver {
 
 	@Override
 	public void setWallpaperBackground(File file) {
-		String desktop = System.getenv("DESKTOP_SESSION");
-		if (desktop.indexOf("gnome") >= 0) {
-			try {
-				String commandToSetBackground = String.format(command,
-						file.getAbsolutePath());
-				Runtime.getRuntime().exec(commandToSetBackground);
-				LOGGER.info("wallpaper saved");
-			} catch (IOException e) {
-				LOGGER.severe(e.getMessage());
-			}
+		try {
+			String commandToSetBackground = String.format(command,
+					file.getAbsolutePath());
+			Runtime.getRuntime().exec(commandToSetBackground);
+			LOGGER.info("wallpaper saved");
+		} catch (IOException e) {
+			LOGGER.severe(e.getMessage());
 		}
 	}
 
