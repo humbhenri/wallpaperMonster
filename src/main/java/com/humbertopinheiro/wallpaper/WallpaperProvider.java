@@ -12,32 +12,38 @@ import static com.google.common.collect.Lists.newArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.jsoup.nodes.Element;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.humbertopinheiro.utils.FileUtils;
 import com.humbertopinheiro.utils.ImageExtension;
 import com.humbertopinheiro.utils.URLUtils;
+import com.humbertopinheiro.wallpaper.model.WallpaperItem;
 
 public abstract class WallpaperProvider {
 
     private URLDownloader urlDownloader;
-    private Iterator<Element> linkIterator;
+    private Iterator<WallpaperItem> linkIterator;
     private FileUtils fileUtils = new FileUtils();
     private List<Wallpaper> wallpapers = newArrayList(new Wallpaper(""));
     private int currentWallpaper = 0;
+    private final ObjectMapper objectMapper;
 
     public WallpaperProvider() {
+        objectMapper = new ObjectMapper();
         urlDownloader = new URLDownloader(getSite());
         linkIterator = getLinkIterator();
     }
 
-    protected abstract Iterator<Element> getLinkIterator();
+    public ObjectMapper getObjectMapper() {
+        return objectMapper;
+    }
+
+    protected abstract Iterator<WallpaperItem> getLinkIterator();
 
     protected abstract String getSite();
 
-    protected abstract String getImageLink(Element wallpaperLink);
+    protected abstract String getImageLink(WallpaperItem wallpaperLink);
 
-    protected abstract String getTitle(Element wallpaperLink);
+    protected abstract String getTitle(WallpaperItem wallpaperLink);
 
     public Wallpaper nextWallpaper() {
         if (hasNext()) {
@@ -66,7 +72,7 @@ public abstract class WallpaperProvider {
 
     private Wallpaper downloadWallpaper() {
         if (hasNext()) {
-            Element wallpaperLink = linkIterator.next();
+            WallpaperItem wallpaperLink = linkIterator.next();
             String title = getTitle(wallpaperLink);
             String imageLink = getImageLink(wallpaperLink);
             if (new ImageExtension(imageLink).isValid()) {

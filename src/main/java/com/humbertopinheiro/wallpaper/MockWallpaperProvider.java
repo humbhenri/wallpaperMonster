@@ -8,6 +8,7 @@ import org.jsoup.nodes.Element;
 
 import com.humbertopinheiro.utils.FileUtils;
 import com.humbertopinheiro.utils.URLUtils;
+import com.humbertopinheiro.wallpaper.model.WallpaperItem;
 
 /**
  * Created with IntelliJ IDEA. User: humberto Date: 12/09/13 Time: 22:35
@@ -17,7 +18,7 @@ public class MockWallpaperProvider extends WallpaperProvider {
 	private final FileUtils fileUtils = new FileUtils();
 
 	@Override
-	protected Iterator<Element> getLinkIterator() {
+	protected Iterator<WallpaperItem> getLinkIterator() {
 		return null;
 	}
 
@@ -50,12 +51,12 @@ public class MockWallpaperProvider extends WallpaperProvider {
 	}
 
 	@Override
-	protected String getImageLink(Element wallpaperLink) {
+	protected String getImageLink(WallpaperItem wallpaperLink) {
 		return null;
 	}
 
 	@Override
-	protected String getTitle(Element wallpaperLink) {
+	protected String getTitle(WallpaperItem wallpaperLink) {
 		return "sample";
 	}
 

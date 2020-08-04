@@ -42,8 +42,12 @@ public class EarthPornSiteTest {
 
     @Before
     public void setUp() {
-        when(urlDownloader.getHTML()).thenReturn(getHTMLContent());
+        when(urlDownloader.getInputStream()).thenReturn(getEarthPornSiteTopJson());
         doNothing().when(fileUtils).saveFromUrl(any(URL.class), anyString());
+    }
+
+    private InputStream getEarthPornSiteTopJson() {
+        return EarthPornSite.class.getResourceAsStream("EarthPorn.json");
     }
 
     @Test
@@ -75,9 +79,5 @@ public class EarthPornSiteTest {
         Wallpaper current = earthPornSite.nextWallpaper();
         assertFalse(current.equals(earthPornSite.previousWallpaper()));
     }
-
-    private String getHTMLContent() {
-        InputStream is = EarthPornSite.class.getResourceAsStream("/EarthPornHTML.txt");
-        return FileUtils.slurpFile(is);
-    }
+    
 }

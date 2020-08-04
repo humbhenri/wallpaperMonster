@@ -3,25 +3,50 @@ package com.humbertopinheiro.wallpaper;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
+import java.util.logging.Logger;
+
+import com.google.common.base.Function;
+import com.google.common.collect.Iterators;
+import com.humbertopinheiro.wallpaper.model.RedditJson;
+import com.humbertopinheiro.wallpaper.model.WallpaperItem;
+import com.humbertopinheiro.wallpaper.model.RedditJson.ChildData;
 
 /**
- * Created with IntelliJ IDEA.
- * User: humberto
- * Date: 03/09/13
- * Time: 21:00
+ * Created with IntelliJ IDEA. User: humberto Date: 03/09/13 Time: 21:00
  */
 public class EarthPornSite extends WallpaperProvider {
 
+    private static final Logger LOGGER = Logger.getLogger(EarthPornSite.class.getName());
+
     @Override
-    protected Iterator<Element> getLinkIterator() {
-        return Jsoup.parse(getUrlDownloader().getHTML())
-                .select("a.title").iterator();
+    protected Iterator<WallpaperItem> getLinkIterator() {
+        try {
+            final InputStream inputStream = getUrlDownloader().getInputStream();
+            final RedditJson jsonVal = getObjectMapper().readerFor(RedditJson.class).readValue(inputStream);
+            inputStream.close();
+            return Iterators.transform(jsonVal.getChildrenData().iterator(), new Function<ChildData, WallpaperItem>() {
+
+				@Override
+				public WallpaperItem apply(final ChildData arg0) {
+					return WallpaperItemFactory.fromReddit(arg0);
+				}
+                
+            });
+
+        } catch (final IOException e) {
+            LOGGER.severe(e.getMessage());
+            return Iterators.emptyIterator();
+        }
     }
 
     @Override
     protected String getSite() {
-        return "http://www.reddit.com/r/earthporn";
+        return "https://www.reddit.com/r/EarthPorn/top.json";
     }
 
     @Override
@@ -30,12 +55,12 @@ public class EarthPornSite extends WallpaperProvider {
     }
 
     @Override
-    protected String getImageLink(Element wallpaperLink) {
+    protected String getImageLink(final WallpaperItem wallpaperLink) {
         return wallpaperLink.attr("href");
     }
 
     @Override
-    protected String getTitle(Element wallpaperLink) {
+    protected String getTitle(final WallpaperItem wallpaperLink) {
         return wallpaperLink.text();
     }
 }

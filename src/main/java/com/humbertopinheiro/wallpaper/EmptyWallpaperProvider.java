@@ -2,27 +2,17 @@ package com.humbertopinheiro.wallpaper;
 
 import java.util.Iterator;
 
-import org.jsoup.nodes.Element;
+import com.humbertopinheiro.wallpaper.model.WallpaperItem;
 
 public class EmptyWallpaperProvider extends WallpaperProvider {
 
 	@Override
-	protected Iterator<Element> getLinkIterator() {
+	protected Iterator<WallpaperItem> getLinkIterator() {
 		return null;
 	}
 
 	@Override
 	protected String getSite() {
-		return null;
-	}
-
-	@Override
-	protected String getImageLink(Element wallpaperLink) {
-		return null;
-	}
-
-	@Override
-	protected String getTitle(Element wallpaperLink) {
 		return null;
 	}
 
@@ -34,6 +24,16 @@ public class EmptyWallpaperProvider extends WallpaperProvider {
 	@Override
 	public boolean hasPrevious() {
 		return false;
+	}
+
+	@Override
+	protected String getImageLink(WallpaperItem wallpaperLink) {
+		return null;
+	}
+
+	@Override
+	protected String getTitle(WallpaperItem wallpaperLink) {
+		return null;
 	}
 
 }
