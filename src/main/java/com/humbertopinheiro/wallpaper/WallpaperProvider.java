@@ -23,7 +23,7 @@ public abstract class WallpaperProvider {
     private URLDownloader urlDownloader;
     private Iterator<WallpaperItem> linkIterator;
     private FileUtils fileUtils = new FileUtils();
-    private List<Wallpaper> wallpapers = newArrayList(new Wallpaper(""));
+    private List<Wallpaper> wallpapers = newArrayList();
     private int currentWallpaper = 0;
     private final ObjectMapper objectMapper;
 
@@ -47,10 +47,10 @@ public abstract class WallpaperProvider {
 
     public Wallpaper nextWallpaper() {
         if (hasNext()) {
-            if (currentWallpaper == wallpapers.size() - 1) {
+            if (currentWallpaper == wallpapers.size()) {
                 wallpapers.add(downloadWallpaper());
             }
-            return wallpapers.get(++currentWallpaper);
+            return wallpapers.get(currentWallpaper++);
         }
         return null;
     }
@@ -60,6 +60,13 @@ public abstract class WallpaperProvider {
             return wallpapers.get(--currentWallpaper);
         }
         return null;
+    }
+
+    public Wallpaper currentWallpaper() {
+        if (wallpapers.isEmpty()) {
+            return nextWallpaper();
+        }
+        return wallpapers.get(0);
     }
 
     public boolean hasPrevious() {
@@ -87,6 +94,14 @@ public abstract class WallpaperProvider {
 
     public URLDownloader getUrlDownloader() {
         return urlDownloader;
+    }
+
+    public int getCurrentWallpaper() {
+        return currentWallpaper;
+    }
+
+    public void setCurrentWallpaper(int currentWallpaper) {
+        this.currentWallpaper = currentWallpaper;
     }
 }
 

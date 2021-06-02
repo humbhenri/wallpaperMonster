@@ -39,7 +39,7 @@ public class WallpaperPanel extends MouseListenerPanel {
 
 		@Override
 		public void onFailure(Throwable throwable) {
-			LOGGER.severe(throwable.getMessage());
+			throwable.printStackTrace();
 		}
 	}
 
@@ -76,7 +76,8 @@ public class WallpaperPanel extends MouseListenerPanel {
 		this.wallpaperProvider = wallpaperProvider;
 		futureWallpaperProvider.setWallpaperProvider(wallpaperProvider);
 		paintFutureWallpaper(futureWallpaperProvider
-				.getFutureWallpaper(Side.RIGHT));
+				.getFutureWallpaper(Side.NONE));
+		wallpaperProvider.setCurrentWallpaper(0);
 	}
 
 	public void addWallpaperPanelEventListener(

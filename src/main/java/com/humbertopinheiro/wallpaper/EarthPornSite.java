@@ -1,20 +1,15 @@
 package com.humbertopinheiro.wallpaper;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Element;
-
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 import java.util.logging.Logger;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Iterators;
 import com.humbertopinheiro.wallpaper.model.RedditJson;
-import com.humbertopinheiro.wallpaper.model.WallpaperItem;
 import com.humbertopinheiro.wallpaper.model.RedditJson.ChildData;
+import com.humbertopinheiro.wallpaper.model.WallpaperItem;
 
 /**
  * Created with IntelliJ IDEA. User: humberto Date: 03/09/13 Time: 21:00

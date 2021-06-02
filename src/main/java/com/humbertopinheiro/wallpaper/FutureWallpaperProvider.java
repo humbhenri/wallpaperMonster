@@ -25,6 +25,7 @@ public class FutureWallpaperProvider {
 		case RIGHT:
 			return nextWallpaper();
 		case NONE:
+			return currentWallpaper();
 		}
 		return null;
 	}
@@ -51,5 +52,14 @@ public class FutureWallpaperProvider {
 			});
 		}
 		return null;
+	}
+
+	private ListenableFuture<Wallpaper> currentWallpaper() {
+		return ThreadPool.INSTANCE.pool().submit(new Callable<Wallpaper>() {
+				@Override
+				public Wallpaper call() {
+					return wallpaperProvider.currentWallpaper();
+				}
+		});
 	}
 }
