@@ -13,17 +13,16 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-import net.miginfocom.swing.MigLayout;
-
-import org.apache.commons.lang3.StringUtils;
-
 import com.humbertopinheiro.application.SystemProperties;
 import com.humbertopinheiro.platform.LinuxWallpaperSaverFactory;
 import com.humbertopinheiro.platform.WallpaperSaverFactory;
-import com.humbertopinheiro.wallpaper.EmptyWallpaperProvider;
 import com.humbertopinheiro.wallpaper.Wallpaper;
 import com.humbertopinheiro.wallpaper.WallpaperProvider;
 import com.humbertopinheiro.wallpaper.WallpaperProviders;
+
+import org.apache.commons.lang3.StringUtils;
+
+import net.miginfocom.swing.MigLayout;
 
 /**
  * Created with IntelliJ IDEA. User: humberto Date: 05/09/13 Time: 23:01
@@ -48,6 +47,7 @@ public class MainWindow extends JFrame implements WallpaperPanelEventListener {
 		pane.add(header, "dock north");
 		this.wallpaperPanel = wallpaperPanel;
 		wallpaperPanel.addWallpaperPanelEventListener(this);
+		wallpaperPanel.paintWallpaper(null);
 		pane.add(wallpaperPanel, "grow");
 		setSize(new Dimension(1024, 768));
 	}
@@ -100,8 +100,9 @@ public class MainWindow extends JFrame implements WallpaperPanelEventListener {
 	}
 
 	public static void main(String... args) {
+		WallpaperProvider wallpaperProvider = new WallpaperProviders().getWallpaperProviders()[0];
 		MainWindow mainWindow = new MainWindow(new WallpaperPanel(
-				new EmptyWallpaperProvider()));
+				wallpaperProvider));
 		WallpaperSaverFactory wallpaperSaverFactory = new WallpaperSaverFactory();
 		if (StringUtils.indexOfIgnoreCase(SystemProperties.instance().getOS(),
 				"linux") > 0) {

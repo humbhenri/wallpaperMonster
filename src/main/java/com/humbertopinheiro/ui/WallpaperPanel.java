@@ -88,8 +88,7 @@ public class WallpaperPanel extends MouseListenerPanel {
 	public void mouseClicked(MouseEvent e) {
 		bounds.setMouse(e.getX(), e.getY());
 		Side sideClicked = bounds.getSideClicked();
-		paintFutureWallpaper(futureWallpaperProvider
-				.getFutureWallpaper(sideClicked));
+		paintWallpaper(sideClicked);
 	}
 
 	@Override
@@ -146,4 +145,9 @@ public class WallpaperPanel extends MouseListenerPanel {
 		repaint();
 	}
 
+	public void paintWallpaper(Side sideClicked) {
+		sideClicked = sideClicked != null ? sideClicked : Side.RIGHT;
+		paintFutureWallpaper(futureWallpaperProvider
+				.getFutureWallpaper(sideClicked));
+	}
 }
